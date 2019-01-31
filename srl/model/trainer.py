@@ -12,7 +12,7 @@ from srl.common.constants import END_INDEX, KEEP_PROB_KEY, LABEL_KEY, LENGTH_KEY
     SENTENCE_INDEX
 from srl.common.srl_utils import deserialize, read_json
 from srl.data.features import get_features_from_config
-from tagger import DBLSTMTagger
+from srl.model.tagger import DBLSTMTagger
 
 
 class TaggerTrainer(object):
@@ -49,15 +49,19 @@ class TaggerTrainer(object):
 
     def train(self):
         self.sess = tf.Session()
+        print('=' * 30 + 'train(step2)' + '=' * 30)
         with self.sess as sess:
+            print('=' * 30 + 'load_graph(step3)' + '=' * 30)
             self.graph = self._load_graph()
             self.graph.train()
             if self.load_path:
                 self._restore(sess)
             else:
+                print('=' * 30 + 'graph.initialize_embeddings(step6)' + '=' * 30)
                 sess.run(tf.global_variables_initializer())
                 self.graph.initialize_embeddings(sess)
 
+            print('=' * 30 + 'start epochs(step7)' + '=' * 30)
             current_epoch, step, max_score = self.graph.global_step.eval() + 1, 0, float('-inf')
             patience = 0
             while current_epoch <= self.max_epochs:

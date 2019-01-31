@@ -157,6 +157,8 @@ class DBLSTMTagger(object):
         self.saver = tf.train.Saver(max_to_keep=2)
 
     def train(self):
+        print('=' * 30 + 'graph.train(step4)' + '=' * 30)
         self.test()
+        print('=' * 30 + 'graph.add_train_ops(step5)' + '=' * 30)
         self.add_train_ops()
         self.saver = tf.train.Saver(max_to_keep=2)

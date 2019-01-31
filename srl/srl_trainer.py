@@ -90,6 +90,7 @@ def main(_):
     if FLAGS.train:
         if not FLAGS.valid:
             raise ValueError('Missing required validation (dev) set. Use "--valid path/to/valid.pkl" to specify validation data.')
+        print('=' * 30 + 'main(step1)' + '=' * 30)
         srl_trainer.train()
     if FLAGS.test:
         srl_trainer.test()

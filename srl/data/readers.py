@@ -2,7 +2,7 @@ import fnmatch
 import os
 import re
 from collections import defaultdict
-from itertools import izip
+# from itertools import izip
 
 from srl.common.constants import INSTANCE_INDEX, LABEL_KEY, MARKER_KEY, SENTENCE_INDEX
 from srl.common.srl_utils import read_json
@@ -54,7 +54,7 @@ class ConllReader(object):
     def read_fields(self, rows):
         sentence = defaultdict(list)
         for row in rows:
-            for index, val in self._index_field_map.iteritems():
+            for index, val in self._index_field_map.items():
                 sentence[val].append(row[index])
         return sentence
 
@@ -90,10 +90,15 @@ class ConllSrlReader(ConllReader):
             if self.is_predicate(row_fields):
                 pred_indices.append(token_idx)
             for index in range(self._pred_start, len(row_fields) - self._pred_end):
+                print('row_fields[index] :', index, row_fields[index])
                 pred_cols[index - self._pred_start].append(row_fields[index])
         # convert from CoNLL05 labels to IOB labels
         for key, val in pred_cols.items():
             pred_cols[key] = ConllSrlReader._convert_to_iob(val)
+
+        print('rows :', rows)
+        print('pred_indices :', pred_indices)
+        print('pred_cols :', pred_cols)
 
         assert len(pred_indices) <= len(pred_cols), (
                 'Unexpected number of predicate columns: %d instead of %d'
@@ -198,7 +203,7 @@ class ConllPhraseReader(Conll2005Reader):
             raise ValueError('Missing phrase file: {}'.format(phrase_path))
         with open(path) as conll_file, open(phrase_path) as phrase_file:
             lines, chunk_lines = [], []
-            for line, chunk_line in izip(conll_file, phrase_file):
+            for line, chunk_line in zip(conll_file, phrase_file):
                 line, chunk_line = line.strip(), chunk_line.strip()
                 if (not line and chunk_line) or (not chunk_line and line):
                     raise ValueError(

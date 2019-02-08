@@ -107,10 +107,10 @@ fi
 
 extract_features() {
     OUTPUT_FILE="${OUTPUT_PATH%/}/${2%$EXT}pkl"
-    if [[ -f ${OUTPUT_FILE} ]]; then
-        echo "Skipping $OUTPUT_FILE since it already exists."
-        return 0
-    fi
+#    if [[ -f ${OUTPUT_FILE} ]]; then
+#        echo "Skipping $OUTPUT_FILE since it already exists."
+#        return 0
+#    fi
 
     INPUT_FILE="${DATA_PATH%/}/$2"
     echo "Extracting features from data at $INPUT_FILE and saving to $OUTPUT_FILE"

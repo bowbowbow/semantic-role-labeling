@@ -73,7 +73,7 @@ class ConllSrlReader(ConllReader):
         instances = []
         fields = self.read_fields(rows)
         for key, labels in self.read_predicates(rows).items():
-            instance = dict(fields)  # copy instance dictionary and add labels
+            instance = dict(fields)  # copy instance dictionary and add labels\
             instance[LABEL_KEY] = labels
             instance[MARKER_KEY] = [index == key and '1' or '0' for index in range(0, len(labels))]
             instance[INSTANCE_INDEX] = self.prop_count
@@ -90,21 +90,23 @@ class ConllSrlReader(ConllReader):
             if self.is_predicate(row_fields):
                 pred_indices.append(token_idx)
             for index in range(self._pred_start, len(row_fields) - self._pred_end):
-                print('row_fields[index] :', index, row_fields[index])
                 pred_cols[index - self._pred_start].append(row_fields[index])
         # convert from CoNLL05 labels to IOB labels
         for key, val in pred_cols.items():
+            # print('before _convert_to_iob: ', val)
             pred_cols[key] = ConllSrlReader._convert_to_iob(val)
-
-        print('rows :', rows)
-        print('pred_indices :', pred_indices)
-        print('pred_cols :', pred_cols)
+            # print('after _convert_to_iob: ', pred_cols[key])
 
         assert len(pred_indices) <= len(pred_cols), (
                 'Unexpected number of predicate columns: %d instead of %d'
                 ', check that predicate start and end indices are correct: %s' % (len(pred_cols), len(pred_indices), rows))
         # create predicate dictionary with keys as predicate word indices and values as corr. lists of labels (1 for each token)
         predicates = {i: pred_cols[index] for index, i in enumerate(pred_indices)}
+
+        # print('rows :', rows)
+        # print('pred_indices :', pred_indices)
+        # print('pred_cols :', pred_cols)
+        # print('predicates :', predicates)
         return predicates
 
     @staticmethod

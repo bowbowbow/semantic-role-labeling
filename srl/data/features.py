@@ -75,6 +75,7 @@ def get_feature(feat_dict):
         return None
 
     name = feat_dict['name']
+    # print('features.py get_feature name: ', name)
     dim = feat_dict['dim']
     rank = feat_dict.get('rank', 2)
 
@@ -282,6 +283,7 @@ class SequenceInstanceProcessor(object):
         instance = {}
         for feature in self.features:
             instance[feature.name] = feature.extractor.extract(sequence)
+            # print('SequenceInstanceProcessor.extract feature :', feature, ', instance[feature.name]: ', instance[feature.name])
             if feature.base_feature:
                 feat = instance[feature.name]
                 instance[LENGTH_KEY] = isinstance(feat, list) and len(feat) or feat.size
@@ -306,9 +308,11 @@ class SequenceInstanceProcessor(object):
         results = []
         for sentence in sentences:
             result = self.extract(sentence, sentence[LABEL_KEY])
+            # print('read_instances.read_instances result :', result)
             if INSTANCE_INDEX not in result:
                 result[INSTANCE_INDEX] = len(results)
             results.append(result)
+
         return results
 
     def train(self, train=True):

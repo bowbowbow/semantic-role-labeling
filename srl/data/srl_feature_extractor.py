@@ -24,7 +24,10 @@ def main(flags):
         raw_instances = CustomSrlReader(**args).read_files(flags.input, flags.ext)
     else:
         raw_instances = Conll2005Reader().read_files(flags.input, flags.ext)
+
+    # print('raw_instances :', raw_instances[:5])
     feats = get_features_from_config(flags.config)
+    print('feats:', feats)
     feature_extractor = SequenceInstanceProcessor(feats=feats)
 
     train = True
@@ -36,6 +39,10 @@ def main(flags):
 
     print('Processing {} SRL instances from {}'.format(len(raw_instances), flags.input))
     instances = feature_extractor.read_instances(raw_instances, train=train)
+
+    print('raw_instances :', raw_instances[:2])
+    print('instances :', instances[:2])
+
     print('Saving {} processed instances to {}'.format(len(instances), flags.output))
     serialize(instances, flags.output)
     if train:

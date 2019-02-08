@@ -69,6 +69,8 @@ class TaggerTrainer(object):
                 then = time.time()
                 with tqdm(total=self.training_iterator.size, leave=False, unit=' instances') as bar:
                     for batch in self.training_iterator.epoch():
+                        print('batch :', batch)
+
                         feed = {self.graph.feed_dict[k]: batch[k] for k in batch.keys() if k in self.graph.feed_dict}
                         feed[self.graph.feed_dict[KEEP_PROB_KEY]] = self.keep_prob
                         sess.run(self.graph.train_step, feed_dict=feed)
